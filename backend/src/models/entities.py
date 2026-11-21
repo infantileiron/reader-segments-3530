@@ -9,9 +9,15 @@ class Reader(Base):
 class Segment(Base):
  __tablename__='segments'
  id=Column(Integer,primary_key=True);name=Column(String(100));k=Column(Integer);features=Column(JSON);state=Column(String(20),default='queued');result=Column(JSON);error=Column(Text,default='')
+class Assignment(Base):
+ __tablename__='assignments'
+ id=Column(Integer,primary_key=True);segment_id=Column(Integer,ForeignKey('segments.id'));state=Column(String(20),default='pending');source_revision=Column(Integer,default=0);candidates=Column(Integer,default=0);result=Column(JSON);error=Column(Text,default='')
 class Outreach(Base):
  __tablename__='outreaches'
- id=Column(Integer,primary_key=True);segment_id=Column(Integer,ForeignKey('segments.id'));cluster_id=Column(Integer);title=Column(String(100));note=Column(Text);members=Column(JSON);status=Column(String(20),default='draft')
+ id=Column(Integer,primary_key=True);segment_id=Column(Integer,ForeignKey('segments.id'));cluster_id=Column(Integer);title=Column(String(100));note=Column(Text);members=Column(JSON);status=Column(String(20),default='draft');assignment_id=Column(Integer,ForeignKey('assignments.id'));assignment_revision=Column(Integer);assigned_members=Column(JSON,default=list)
 class Audit(Base):
  __tablename__='audits'
  id=Column(Integer,primary_key=True);actor=Column(String(100));action=Column(String(200));created=Column(String(40))
+class Meta(Base):
+ __tablename__='meta'
+ key=Column(String(40),primary_key=True);value=Column(Integer,default=0)

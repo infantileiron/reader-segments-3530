@@ -1,5 +1,5 @@
 from pydantic import BaseModel,Field,field_validator
-from typing import Literal
+from typing import Literal,Optional
 class Login(BaseModel):email:str;password:str
 class ReaderInput(BaseModel):
  code:str=Field(min_length=1,max_length=60)
@@ -16,8 +16,10 @@ class SegmentInput(BaseModel):
  def unique(cls,v):
   if len(set(v))!=len(v):raise ValueError('特征不能重复')
   return v
+class AssignmentInput(BaseModel):segment_id:int=Field(gt=0)
 class OutreachInput(BaseModel):
  segment_id:int=Field(gt=0)
  cluster_id:int=Field(ge=0,le=5)
  title:str=Field(min_length=2,max_length=100)
  note:str=Field(min_length=8,max_length=2000)
+ assignment_id:Optional[int]=Field(default=None,gt=0)

@@ -9,6 +9,9 @@ from src.middlewares.request import RequestId,SecurityHeaders
 @asynccontextmanager
 async def lifespan(app):
  Base.metadata.create_all(engine)
+ from src.config.database import Session
+ from src.services.business import locked_revision
+ with Session() as s:locked_revision(s);s.commit()
  if os.getenv('SEED_DEMO')=='true':
   try:
    from scripts.seed_demo import seed
